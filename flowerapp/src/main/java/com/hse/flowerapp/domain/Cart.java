@@ -34,9 +34,6 @@ public class Cart {
     @OneToOne(mappedBy = "cart", cascade=CascadeType.ALL)
     private User user;
 
-//    @ManyToMany(mappedBy = "cartList", fetch = FetchType.LAZY)
-//    private List<Item> itemList = new ArrayList<>();
-
     @OneToMany(mappedBy = "cart")
     List<ItemCart> countItemInCarts = new ArrayList<>();
 

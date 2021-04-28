@@ -1,7 +1,6 @@
 package com.hse.flowerapp.service.impl;
 
 import com.hse.flowerapp.domain.Cart;
-import com.hse.flowerapp.domain.CartItem;
 import com.hse.flowerapp.domain.Item;
 import com.hse.flowerapp.domain.ItemCart;
 import com.hse.flowerapp.dto.CartDto;
