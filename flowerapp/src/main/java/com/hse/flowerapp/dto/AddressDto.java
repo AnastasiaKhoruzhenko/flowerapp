@@ -1,6 +1,7 @@
 package com.hse.flowerapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hse.flowerapp.domain.Address;
 import lombok.Data;
 
 @Data
@@ -13,7 +14,7 @@ public class AddressDto {
     private String town;
     private String street;
     private String house;
-    private String houseBuilding;
+    private String building;
     private String flat;
 
     public Long getUserId() {
@@ -65,11 +66,11 @@ public class AddressDto {
     }
 
     public String getHouseBuilding() {
-        return houseBuilding;
+        return building;
     }
 
     public void setHouseBuilding(String houseBuilding) {
-        this.houseBuilding = houseBuilding;
+        this.building = houseBuilding;
     }
 
     public String getFlat() {
@@ -78,5 +79,25 @@ public class AddressDto {
 
     public void setFlat(String flat) {
         this.flat = flat;
+    }
+
+    public static AddressDto toDto(Address address){
+        AddressDto addressDto = new AddressDto();
+
+        addressDto.setRegion(address.getRegion());
+        addressDto.setTown(address.getTown());
+        addressDto.setStreet(address.getStreet());
+        addressDto.setHouse(address.getHouse());
+        if(address.getHouseBuilding() != null)
+            addressDto.setHouseBuilding(address.getHouseBuilding());
+        else
+            addressDto.setHouseBuilding(null);
+
+        if(address.getFlat() != null)
+            addressDto.setFlat(address.getFlat());
+        else
+            addressDto.setFlat(null);
+
+        return addressDto;
     }
 }

@@ -46,6 +46,10 @@ public class UserServiceImpl implements UserService {
         List<Order> orderList = new ArrayList<>();
         List<Review> reviewList = new ArrayList<>();
 
+        User user1 = findByEmail(user.getEmail());
+        if(user1!=null)
+            return null;
+
         // Если продавец
         switch (role) {
             case "ROLE_SELLER": {
@@ -76,7 +80,12 @@ public class UserServiceImpl implements UserService {
             }
             case "ROLE_USER": {
                 Role roleUser = roleRepository.findByName("ROLE_USER");
+
                 Cart cart = new Cart();
+                cart.setTotalSum(0);
+                cart.setDiscountSum(0);
+                cart.setTotalCount(0);
+
                 user.setCart(cart);
                 cart.setUser(user);
                 List<Role> roleList = new ArrayList<>();
@@ -241,14 +250,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Address createShopAddress(AddressDto address) {
+        log.info(address.getHouseBuilding());
         Address newAddress = convertDtoToEntity(address);
+        log.info(newAddress.getHouseBuilding());
         newAddress.setAddressType(AddressType.SHOP_ADDRESS);
         addressRepository.save(newAddress);
 
+        log.info("shop address " + address.getShopId().toString());
         // не работает
         Shop shop = shopRepository.getShopById(address.getShopId());
         shop.setShopAddress(newAddress);
         shopRepository.save(shop);
+
+        newAddress.setShop(shop);
 
         return newAddress;
     }
@@ -260,6 +274,7 @@ public class UserServiceImpl implements UserService {
         newAddress.setStreet(addressDto.getStreet());
         newAddress.setHouse(addressDto.getHouse());
 
+        log.info("conc=vert to entity " + addressDto.getHouseBuilding());
         if(addressDto.getHouseBuilding() != null)
             newAddress.setHouseBuilding(addressDto.getHouseBuilding());
 
@@ -267,5 +282,10 @@ public class UserServiceImpl implements UserService {
             newAddress.setFlat(addressDto.getFlat());
 
         return newAddress;
+    }
+
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 }

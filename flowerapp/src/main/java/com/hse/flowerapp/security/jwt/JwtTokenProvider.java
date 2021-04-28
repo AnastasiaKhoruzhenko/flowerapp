@@ -2,6 +2,7 @@ package com.hse.flowerapp.security.jwt;
 
 import com.hse.flowerapp.domain.Role;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +20,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.token.secret}")
-    private String secret;
+    @Value("flowerapp")
+    private String secret = Base64.getEncoder().encodeToString("flowerapp".getBytes());;
 
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
@@ -40,7 +42,9 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
+        log.info("init before "+secret);
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        log.info("init after "+secret);
     }
 
     public String createToken(String username, List<Role> roles) {
@@ -65,6 +69,7 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
+        log.info(secret);
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -86,7 +91,7 @@ public class JwtTokenProvider {
 
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException("JWT token is expired or invalid" + e.getMessage());
         }
     }
 

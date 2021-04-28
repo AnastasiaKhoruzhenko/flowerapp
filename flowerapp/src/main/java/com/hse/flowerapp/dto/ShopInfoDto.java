@@ -1,19 +1,18 @@
 package com.hse.flowerapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hse.flowerapp.domain.Shop;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SaveShopDto {
+public class ShopInfoDto {
     Long userId;
     Long shopId;
     String shopName;
     String description;
-    Float rating;
     Integer deliveryPrice;
     String openTime;
-
 
     public Long getUserId() {
         return userId;
@@ -37,14 +36,6 @@ public class SaveShopDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Float getRating() {
-        return rating;
-    }
-
-    public void setRating(Float rating) {
-        this.rating = rating;
     }
 
     public Integer getDeliveryPrice() {

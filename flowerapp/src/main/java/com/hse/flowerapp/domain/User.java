@@ -27,8 +27,8 @@ public class User extends BaseEntity {
     private String surname;
 
     @Column(name = "birthday")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate birthday;
+    //@JsonFormat(pattern = "dd/MM/yyyy")
+    private String birthday;
 
     @NotNull
     @Column(name = "email")
@@ -117,11 +117,11 @@ public class User extends BaseEntity {
         this.surname = surname;
     }
 
-    public LocalDate getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDate birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

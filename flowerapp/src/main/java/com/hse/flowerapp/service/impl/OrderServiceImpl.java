@@ -3,6 +3,7 @@ package com.hse.flowerapp.service.impl;
 import com.hse.flowerapp.domain.Order;
 import com.hse.flowerapp.domain.OrderItem;
 import com.hse.flowerapp.domain.OrderStatus;
+import com.hse.flowerapp.domain.User;
 import com.hse.flowerapp.dto.OrderDto;
 import com.hse.flowerapp.repository.ItemRepository;
 import com.hse.flowerapp.repository.OrderItemRepository;
@@ -45,42 +46,87 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(OrderDto orderDto) {
+        User user = userRepository.getById(orderDto.getUserId());
+
         Order newOrder = new Order();
+
         newOrder.setTotalSum(orderDto.getTotalSum());
         newOrder.setOrderStatus(OrderStatus.CREATED);
-        newOrder.setSecretDelivery(false);
+        newOrder.setSecretDelivery(orderDto.getSecretDelivery());
         newOrder.setDeliveryPrice(orderDto.getDeliveryPrice());
+        newOrder.setName(orderDto.getName());
         newOrder.setPhone(orderDto.getPhone());
         newOrder.setEmail(orderDto.getEmail());
+        newOrder.setAddPostcard(orderDto.getAddPostcard());
+        newOrder.setSayItIsFlower(orderDto.getSayItIsFlower());
+        newOrder.setSayFrom(orderDto.getSayFrom());
+        newOrder.setCallToConfirm(orderDto.getCallToConfirm());
+
+        newOrder.setTown(orderDto.getTown());
+        newOrder.setStreet(orderDto.getStreet());
+        newOrder.setHouse(orderDto.getHouse());
 
         if(orderDto.getPromocode() != null)
             newOrder.setPromocode(orderDto.getPromocode());
         if(orderDto.getDiscountSum() != null)
             newOrder.setDiscountSum(orderDto.getDiscountSum());
-        if(orderDto.getName() != null)
-            newOrder.setName(orderDto.getName());
-        if(orderDto.getComment() != null)
-            newOrder.setComment(orderDto.getComment());
-        
-        newOrder.setUser(userRepository.getById(orderDto.getUserId()));
+        if(orderDto.getSectretName() != null)
+            newOrder.setSectretName(orderDto.getSectretName());
+        if(orderDto.getSecretPhone() != null)
+            newOrder.setSecretPhone(orderDto.getSecretPhone());
+        if(orderDto.getPostcardText() != null)
+            newOrder.setPostcardText(orderDto.getPostcardText());
 
-        for (Map.Entry<Long, Integer> item: orderDto.getListItemIds().entrySet()) {
+        if(orderDto.getBuilding() != null)
+            newOrder.setBuilding(orderDto.getBuilding());
+        if(orderDto.getFlat() != null)
+            newOrder.setFlat(orderDto.getFlat());
+
+        orderRepository.save(newOrder);
+
+        //log.info("khor " + orderDto.getListItemIds().toString());
+
+        for(Long id: orderDto.getListIds()){
+            int index = orderDto.getListIds().indexOf(id);
             OrderItem orderItem = new OrderItem();
-            orderItem.setItem(itemRepository.getItemById(item.getKey()));
-            orderItem.setCountOfThisItemInOrder(item.getValue());
+            orderItem.setItem(itemRepository.getItemById(id));
+            orderItem.setCountOfThisItemInOrder(orderDto.getListCount().get(index));
             orderItem.setOrder(newOrder);
             orderItemRepository.save(orderItem);
 
             List<OrderItem> orderItemList1 = newOrder.getCountItemInOrder();
             orderItemList1.add(orderItem);
             newOrder.setCountItemInOrder(orderItemList1);
-            orderRepository.save(newOrder);
 
-            List<OrderItem> orderItemList2 = itemRepository.getItemById(item.getKey()).getCountItemInOrders();
+            List<OrderItem> orderItemList2 = itemRepository.getItemById(id).getCountItemInOrders();
             orderItemList2.add(orderItem);
-            itemRepository.getItemById(item.getKey()).setCountItemInOrders(orderItemList2);
-            itemRepository.save(itemRepository.getItemById(item.getKey()));
+            itemRepository.getItemById(Long.valueOf(id)).setCountItemInOrders(orderItemList2);
+            itemRepository.save(itemRepository.getItemById(Long.valueOf(id)));
         }
+
+//        for (Map.Entry<String, String> item: orderDto.getListItemIds().entrySet()) {
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setItem(itemRepository.getItemById(Long.valueOf(item.getKey())));
+//            orderItem.setCountOfThisItemInOrder(Integer.valueOf(item.getValue()));
+//            orderItem.setOrder(newOrder);
+//            orderItemRepository.save(orderItem);
+//
+//            List<OrderItem> orderItemList1 = newOrder.getCountItemInOrder();
+//            orderItemList1.add(orderItem);
+//            newOrder.setCountItemInOrder(orderItemList1);
+//            orderRepository.save(newOrder);
+//
+//            List<OrderItem> orderItemList2 = itemRepository.getItemById(Long.valueOf(item.getKey())).getCountItemInOrders();
+//            orderItemList2.add(orderItem);
+//            itemRepository.getItemById(Long.valueOf(item.getKey())).setCountItemInOrders(orderItemList2);
+//            itemRepository.save(itemRepository.getItemById(Long.valueOf(item.getKey())));
+//        }
+        List<Order> orderItemList = user.getOrderList();
+        orderItemList.add(newOrder);
+        user.setOrderList(orderItemList);
+        userRepository.save(user);
+
+        newOrder.setUser(user);
 
         return newOrder;
     }

@@ -52,4 +52,14 @@ public class ItemCart {
     public void setCountOfThisItemInCart(int countOfThisItemInCart) {
         this.countOfThisItemInCart = countOfThisItemInCart;
     }
+
+    @Override
+    public String toString() {
+        return "ItemCart{" +
+                "id=" + id +
+                ", cart=" + cart.getId().toString() +
+                ", item=" + item.getId().toString() +
+                ", countOfThisItemInCart=" + countOfThisItemInCart +
+                '}';
+    }
 }

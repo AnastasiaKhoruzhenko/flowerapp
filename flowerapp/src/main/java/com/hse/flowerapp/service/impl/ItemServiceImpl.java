@@ -1,6 +1,7 @@
 package com.hse.flowerapp.service.impl;
 
 import com.hse.flowerapp.domain.Item;
+import com.hse.flowerapp.domain.ItemSize;
 import com.hse.flowerapp.domain.Shop;
 import com.hse.flowerapp.dto.ItemDto;
 import com.hse.flowerapp.repository.ItemRepository;
@@ -88,6 +89,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto convertToDTO(Item item){
         ItemDto itemDto = new ItemDto();
 
+        itemDto.setItemId(item.getId());
         itemDto.setPhotoUrl(item.getPhotoURL());
         itemDto.setHeight(item.getHeight());
         itemDto.setWidth(item.getWidth());
@@ -99,6 +101,8 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setDiscount(item.getDiscount());
         itemDto.setDiscountPrice(item.getDiscountPrice());
         itemDto.setAvailable(item.getAvailable());
+        itemDto.setCategoryName(item.getCategoryName());
+        itemDto.setFlowers(item.getFlowers());
 
         return itemDto;
     }
@@ -111,12 +115,22 @@ public class ItemServiceImpl implements ItemService {
         item.setWidth(itemDto.getWidth());
         item.setShortDescription(itemDto.getShortDescription());
         item.setFullDescription(itemDto.getFullDescription());
-        item.setSize(itemDto.getSize());
         item.setName(itemDto.getName());
         item.setPrice(itemDto.getPrice());
-        item.setDiscount(itemDto.getDiscount());
-        item.setDiscountPrice(itemDto.getDiscountPrice());
         item.setAvailable(itemDto.getAvailable());
+        switch (itemDto.getSize()){
+            case "Маленький": item.setSize(ItemSize.SMALL.toString());break;
+            case "Средний": item.setSize(ItemSize.AVERAGE.toString());break;
+            case "Большой": item.setSize(ItemSize.BIG.toString());break;
+        }
+
+        if(itemDto.getDiscount()!= null)
+            item.setDiscount(itemDto.getDiscount());
+        if(itemDto.getDiscountPrice() != null)
+            item.setDiscountPrice(itemDto.getDiscountPrice());
+
+        item.setCategoryName(itemDto.getCategoryName());
+        item.setFlowers(itemDto.getFlowers());
 
         return item;
     }

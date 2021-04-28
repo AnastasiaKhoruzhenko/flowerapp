@@ -14,7 +14,7 @@ public class RegisterUserDto {
     String surname;
     String password;
     String role;
-    LocalDate birthday;
+    String birthday;
 
     public User toUser() {
         User user = new User();

@@ -91,7 +91,7 @@ public class Address {
     }
 
     public void setHouseBuilding(String houseBuilding) {
-        this.house = houseBuilding;
+        this.houseBuilding = houseBuilding;
     }
 
     public AddressType getAddressType() {

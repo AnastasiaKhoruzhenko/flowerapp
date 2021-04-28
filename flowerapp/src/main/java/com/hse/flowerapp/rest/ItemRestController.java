@@ -3,6 +3,7 @@ package com.hse.flowerapp.rest;
 import com.hse.flowerapp.dto.ItemDto;
 import com.hse.flowerapp.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +21,15 @@ public class ItemRestController {
 
     @GetMapping(value = "/all")
     @ResponseBody
-    public List<ItemDto> getAll(){
-        return itemService.getAllItems();
+    public ResponseEntity getAll(){
+        List<ItemDto> itemDtoList = itemService.getAllItems();
+        return ResponseEntity.ok(itemDtoList);
     }
 
     @GetMapping(value = "{id}")
     @ResponseBody
-    public ItemDto getItemById(@PathVariable("id") Long id){
-        return itemService.getItemById(id);
+    public ResponseEntity getItemById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(itemService.getItemById(id));
     }
 }
 

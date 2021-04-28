@@ -36,4 +36,6 @@ public interface UserService {
     Address createShopAddress(AddressDto addressDto);
 
     Address createPersonalAddress(AddressDto addressDto);
+
+    void saveUser(User user);
 }

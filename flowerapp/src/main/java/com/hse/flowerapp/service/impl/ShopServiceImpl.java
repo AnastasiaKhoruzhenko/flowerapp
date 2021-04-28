@@ -2,6 +2,7 @@ package com.hse.flowerapp.service.impl;
 
 import com.hse.flowerapp.domain.Shop;
 import com.hse.flowerapp.dto.ShopDto;
+import com.hse.flowerapp.dto.ShopInfoDto;
 import com.hse.flowerapp.repository.ShopRepository;
 import com.hse.flowerapp.repository.UserRepository;
 import com.hse.flowerapp.service.ShopService;
@@ -32,7 +33,8 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(shop);
     }
 
-    private ShopDto convertToDTO(Shop shop){
+    @Override
+    public ShopDto convertToDTO(Shop shop) {
         ShopDto shopDto = new ShopDto();
 
         shopDto.setDeliveryPrice(shop.getDeliveryPrice());
@@ -40,14 +42,27 @@ public class ShopServiceImpl implements ShopService {
         shopDto.setRating(shop.getRating());
         shopDto.setShopName(shop.getName());
         shopDto.setDescription(shop.getDescription());
-        shopDto.setAddressId(shop.getShopAddress().getId());
-        shopDto.setUserId(shop.getUser().getId());
+        //shopDto.setAddressId(shop.getShopAddress().getId());
+        //shopDto.setUserId(shop.getUser().getId());
         shopDto.setItemCount(shop.getItemCount());
 
         return shopDto;
     }
 
-    private Shop convertToEntity(ShopDto shopDto){
+    @Override
+    public ShopInfoDto convertShopToShopInfoDto(Shop shop) {
+        ShopInfoDto shopInfoDto = new ShopInfoDto();
+
+        shopInfoDto.setDeliveryPrice(shop.getDeliveryPrice());
+        shopInfoDto.setOpenTime(shop.getOpenTime());
+        shopInfoDto.setShopName(shop.getName());
+        shopInfoDto.setDescription(shop.getDescription());
+
+        return shopInfoDto;
+    }
+
+    @Override
+    public Shop convertToEntity(ShopDto shopDto) {
         Shop shop = new Shop();
 
         shop.setDeliveryPrice(shopDto.getDeliveryPrice());
@@ -61,5 +76,4 @@ public class ShopServiceImpl implements ShopService {
 
         return shop;
     }
-
 }

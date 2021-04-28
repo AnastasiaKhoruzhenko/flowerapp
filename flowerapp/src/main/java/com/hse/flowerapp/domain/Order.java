@@ -18,7 +18,7 @@ public class Order extends BaseEntity {
 
     @NotNull
     @Column(name = "total_sum")
-    private String totalSum;
+    private Integer totalSum;
 
     @Column(name = "promocode")
     private String promocode;
@@ -50,9 +50,6 @@ public class Order extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "comment")
-    private String comment;
-
     @ManyToOne(cascade=CascadeType.ALL)
     private User user;
 
@@ -61,6 +58,42 @@ public class Order extends BaseEntity {
 
     @Column(name = "address_id")
     Long addressId;
+
+    @Column(name = "secretName")
+    String sectretName;
+
+    @Column(name = "secretPhone")
+    String secretPhone;
+
+    @Column(name = "addPostcard")
+    Boolean addPostcard;
+
+    @Column(name = "postcardText")
+    String postcardText;
+
+    @Column(name = "sayItIsFlower")
+    Boolean sayItIsFlower;
+
+    @Column(name = "sayFrom")
+    Boolean sayFrom;
+
+    @Column(name = "callToConfirm")
+    Boolean callToConfirm;
+
+    @Column(name = "town")
+    String town;
+
+    @Column(name = "street")
+    String street;
+
+    @Column(name = "house")
+    String house;
+
+    @Column(name = "building")
+    String building;
+
+    @Column(name = "flat")
+    String flat;
 
 //    // товары
 //    @ManyToMany(fetch = FetchType.EAGER)
@@ -78,11 +111,11 @@ public class Order extends BaseEntity {
         this.id = id;
     }
 
-    public String getTotalSum() {
+    public Integer getTotalSum() {
         return totalSum;
     }
 
-    public void setTotalSum(String totalSum) {
+    public void setTotalSum(Integer totalSum) {
         this.totalSum = totalSum;
     }
 
@@ -150,14 +183,6 @@ public class Order extends BaseEntity {
         this.phone = phone;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public User getUser() {
         return user;
     }
@@ -178,11 +203,99 @@ public class Order extends BaseEntity {
 
     public void setAddressId(Long addressId) { this.addressId = addressId; }
 
-    //    public List<Item> getItemList() {
-//        return itemList;
-//    }
-//
-//    public void setItemList(List<Item> itemList) {
-//        this.itemList = itemList;
-//    }
+    public String getSectretName() {
+        return sectretName;
+    }
+
+    public void setSectretName(String sectretName) {
+        this.sectretName = sectretName;
+    }
+
+    public String getSecretPhone() {
+        return secretPhone;
+    }
+
+    public void setSecretPhone(String secretPhone) {
+        this.secretPhone = secretPhone;
+    }
+
+    public Boolean getAddPostcard() {
+        return addPostcard;
+    }
+
+    public void setAddPostcard(Boolean addPostcard) {
+        this.addPostcard = addPostcard;
+    }
+
+    public String getPostcardText() {
+        return postcardText;
+    }
+
+    public void setPostcardText(String postcardText) {
+        this.postcardText = postcardText;
+    }
+
+    public Boolean getSayItIsFlower() {
+        return sayItIsFlower;
+    }
+
+    public void setSayItIsFlower(Boolean sayItIsFlower) {
+        this.sayItIsFlower = sayItIsFlower;
+    }
+
+    public Boolean getSayFrom() {
+        return sayFrom;
+    }
+
+    public void setSayFrom(Boolean sayFrom) {
+        this.sayFrom = sayFrom;
+    }
+
+    public Boolean getCallToConfirm() {
+        return callToConfirm;
+    }
+
+    public void setCallToConfirm(Boolean callToConfirm) {
+        this.callToConfirm = callToConfirm;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
 }

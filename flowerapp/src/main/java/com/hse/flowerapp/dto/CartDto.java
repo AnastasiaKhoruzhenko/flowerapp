@@ -1,8 +1,11 @@
 package com.hse.flowerapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hse.flowerapp.domain.ItemCart;
 import com.hse.flowerapp.domain.User;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,7 +16,7 @@ public class CartDto {
     private Integer totalSum;
     private Integer discountSum;
     private String promocode;
-    private User user;
+    private List<ShortItemDto> shortItems;
 
     public Long getId() {
         return id;
@@ -55,11 +58,11 @@ public class CartDto {
         this.promocode = promocode;
     }
 
-    public User getUser() {
-        return user;
+    public List<ShortItemDto> getItemCartList() {
+        return shortItems;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setItemCartList(List<ShortItemDto> shortItems) {
+        this.shortItems = shortItems;
     }
 }

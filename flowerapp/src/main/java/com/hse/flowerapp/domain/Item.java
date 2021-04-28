@@ -60,18 +60,27 @@ public class Item extends BaseEntity{
     @Column(name = "available")
     Boolean available;
 
+    @NotNull
+    @Column(name = "category")
+    String categoryName;
+
+    @NotNull
+    @Column(name = "flowers")
+    String flowers;
+
 //    @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
 //    private List<User> userList;
 
 //    @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
 //    private List<Order> orderList = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinTable(name = "item_category",
-            joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "category_id", referencedColumnName = "id")})
-    private List<Category> categoryList = new ArrayList<>();
+    // khor worked
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @Fetch(value = FetchMode.SUBSELECT)
+//    @JoinTable(name = "item_category",
+//            joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
+//            inverseJoinColumns = {@JoinColumn(name = "category_id", referencedColumnName = "id")})
+//    private List<Category> categoryList = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="shop_id")
@@ -209,13 +218,13 @@ public class Item extends BaseEntity{
 //        this.orderList = orderList;
 //    }
 
-    public List<Category> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<Category> categoryList) {
-        this.categoryList = categoryList;
-    }
+//    public List<Category> getCategoryList() {
+//        return categoryList;
+//    }
+//
+//    public void setCategoryList(List<Category> categoryList) {
+//        this.categoryList = categoryList;
+//    }egt
 
     public Shop getShop() { return shop; }
 
@@ -235,5 +244,21 @@ public class Item extends BaseEntity{
 
     public void setCountItemInOrders(List<OrderItem> countItemInOrders) {
         this.countItemInOrders = countItemInOrders;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getFlowers() {
+        return flowers;
+    }
+
+    public void setFlowers(String flowers) {
+        this.flowers = flowers;
     }
 }

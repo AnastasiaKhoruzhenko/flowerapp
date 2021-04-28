@@ -1,7 +1,10 @@
 package com.hse.flowerapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hse.flowerapp.domain.Item;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,6 +24,12 @@ public class ItemDto {
     private Integer discountPrice;
     private Integer discount;
     private Boolean available;
+    private String categoryName;
+    private String flowers;
+
+    //private List<Category> categoryList;
+
+
 
     public Long getShopId() { return shopId; }
 
@@ -83,4 +92,16 @@ public class ItemDto {
     public Long getUserId() { return userId; }
 
     public void setUserId(Long userId) { this.userId = userId; }
+
+    public String getCategoryName() { return categoryName; }
+
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+
+    public String getFlowers() {
+        return flowers;
+    }
+
+    public void setFlowers(String flowers) {
+        this.flowers = flowers;
+    }
 }
