@@ -12,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -50,5 +51,33 @@ public class OrderRestController {
         cartService.clearCart(user.getId());
 
         return ResponseEntity.ok(OrderDto.convertToOrderDto(order1));
+    }
+
+    @GetMapping(value = "list")
+    public ResponseEntity getAllOrders() {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        List<Order> orderList = user.getOrderList();
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for(Order order : orderList) {
+            orderDtoList.add(OrderDto.convertToOrderDto(order));
+        }
+
+        return ResponseEntity.ok(orderDtoList);
+    }
+
+    @GetMapping(value = "{id}")
+    public ResponseEntity getOrderById(@PathVariable("id") Long id) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        return ResponseEntity.ok(orderService.getItemById(id));
     }
 }

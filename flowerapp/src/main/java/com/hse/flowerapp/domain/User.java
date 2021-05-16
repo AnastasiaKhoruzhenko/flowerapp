@@ -47,18 +47,14 @@ public class User extends BaseEntity {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "role")
+    private String role;
+
     @OneToMany
     @JoinTable(name = "user_order",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")})
     private List<Order> orderList = new ArrayList<>();
-
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @Fetch(value = FetchMode.SUBSELECT)
-//    @JoinTable(name = "user_item",
-//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")})
-//    private List<Item> itemList;
 
     // пользователь и отзыв
     @OneToMany
@@ -89,6 +85,10 @@ public class User extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roleList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name="work_shop_id")
+    private Shop workShop;
 
     public User() {
     }
@@ -201,11 +201,27 @@ public class User extends BaseEntity {
 
     public void setShop(Shop shop) { this.shop = shop; }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public List<Role> getRoleList() {
         return roleList;
     }
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+    public Shop getWorkShop() {
+        return workShop;
+    }
+
+    public void setWorkShop(Shop workShop) {
+        this.workShop = workShop;
     }
 }

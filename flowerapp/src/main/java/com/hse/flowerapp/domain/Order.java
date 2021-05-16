@@ -95,13 +95,8 @@ public class Order extends BaseEntity {
     @Column(name = "flat")
     String flat;
 
-//    // товары
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @Fetch(value = FetchMode.SUBSELECT)
-//    @JoinTable(name = "order_items",
-//            joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")})
-//    private List<Item> itemList;
+    @Column(name = "shop_id")
+    Long shopId;
 
     public Long getId() {
         return id;
@@ -297,5 +292,13 @@ public class Order extends BaseEntity {
 
     public void setFlat(String flat) {
         this.flat = flat;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 }

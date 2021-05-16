@@ -27,8 +27,6 @@ public class ItemDto {
     private String categoryName;
     private String flowers;
 
-    //private List<Category> categoryList;
-
 
 
     public Long getShopId() { return shopId; }

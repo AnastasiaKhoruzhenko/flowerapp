@@ -1,21 +1,16 @@
 package com.hse.flowerapp.service.impl;
 
-import com.hse.flowerapp.domain.Order;
-import com.hse.flowerapp.domain.OrderItem;
-import com.hse.flowerapp.domain.OrderStatus;
-import com.hse.flowerapp.domain.User;
+import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.OrderDto;
-import com.hse.flowerapp.repository.ItemRepository;
-import com.hse.flowerapp.repository.OrderItemRepository;
-import com.hse.flowerapp.repository.OrderRepository;
-import com.hse.flowerapp.repository.UserRepository;
+import com.hse.flowerapp.repository.*;
 import com.hse.flowerapp.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -25,18 +20,20 @@ public class OrderServiceImpl implements OrderService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final OrderItemRepository orderItemRepository;
+    private final ShopRepository shopRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ItemRepository itemRepository, UserRepository userRepository, OrderItemRepository orderItemRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ItemRepository itemRepository, UserRepository userRepository, OrderItemRepository orderItemRepository, ShopRepository shopRepository) {
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.orderItemRepository = orderItemRepository;
+        this.shopRepository = shopRepository;
     }
 
     @Override
     public OrderDto getItemById(Long order_id) {
-        return null;
+        return OrderDto.convertToOrderDto(orderRepository.getById(order_id));
     }
 
     @Override
@@ -66,12 +63,19 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setStreet(orderDto.getStreet());
         newOrder.setHouse(orderDto.getHouse());
 
+        Long shop_id = itemRepository.getItemById(orderDto.getListIds().get(0)).getId();
+        newOrder.setShopId(shop_id);
+
+        Date date = new Date();
+        newOrder.setUpdated(date);
+        newOrder.setCreated(date);
+
         if(orderDto.getPromocode() != null)
             newOrder.setPromocode(orderDto.getPromocode());
         if(orderDto.getDiscountSum() != null)
             newOrder.setDiscountSum(orderDto.getDiscountSum());
-        if(orderDto.getSectretName() != null)
-            newOrder.setSectretName(orderDto.getSectretName());
+        if(orderDto.getSecretName() != null)
+            newOrder.setSectretName(orderDto.getSecretName());
         if(orderDto.getSecretPhone() != null)
             newOrder.setSecretPhone(orderDto.getSecretPhone());
         if(orderDto.getPostcardText() != null)
@@ -83,8 +87,6 @@ public class OrderServiceImpl implements OrderService {
             newOrder.setFlat(orderDto.getFlat());
 
         orderRepository.save(newOrder);
-
-        //log.info("khor " + orderDto.getListItemIds().toString());
 
         for(Long id: orderDto.getListIds()){
             int index = orderDto.getListIds().indexOf(id);
@@ -104,23 +106,6 @@ public class OrderServiceImpl implements OrderService {
             itemRepository.save(itemRepository.getItemById(Long.valueOf(id)));
         }
 
-//        for (Map.Entry<String, String> item: orderDto.getListItemIds().entrySet()) {
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setItem(itemRepository.getItemById(Long.valueOf(item.getKey())));
-//            orderItem.setCountOfThisItemInOrder(Integer.valueOf(item.getValue()));
-//            orderItem.setOrder(newOrder);
-//            orderItemRepository.save(orderItem);
-//
-//            List<OrderItem> orderItemList1 = newOrder.getCountItemInOrder();
-//            orderItemList1.add(orderItem);
-//            newOrder.setCountItemInOrder(orderItemList1);
-//            orderRepository.save(newOrder);
-//
-//            List<OrderItem> orderItemList2 = itemRepository.getItemById(Long.valueOf(item.getKey())).getCountItemInOrders();
-//            orderItemList2.add(orderItem);
-//            itemRepository.getItemById(Long.valueOf(item.getKey())).setCountItemInOrders(orderItemList2);
-//            itemRepository.save(itemRepository.getItemById(Long.valueOf(item.getKey())));
-//        }
         List<Order> orderItemList = user.getOrderList();
         orderItemList.add(newOrder);
         user.setOrderList(orderItemList);
@@ -134,5 +119,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto cancelOrder(OrderDto orderDto) {
         return null;
+    }
+
+    @Override
+    public List<OrderDto> getAllShopOrders(Long id) {
+        List<Order> orderList = new ArrayList<>();
+        Shop shop = shopRepository.getShopById(id);
+        orderList = orderRepository.findAll();
+        orderList.removeIf(order -> !order.getShopId().equals(id));
+
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (Order order : orderList) {
+            orderDtoList.add(OrderDto.convertToOrderDto(order));
+        }
+
+        return orderDtoList;
     }
 }

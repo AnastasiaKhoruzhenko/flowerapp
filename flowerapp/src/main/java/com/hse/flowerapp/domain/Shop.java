@@ -47,6 +47,9 @@ public class Shop extends BaseEntity{
     @OneToMany(mappedBy = "shop")
     private List<Item> itemList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "workShop")
+    private List<User> sellersList = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -120,4 +123,12 @@ public class Shop extends BaseEntity{
     public Integer getItemCount() { return itemCount; }
 
     public void setItemCount(Integer itemCount) { this.itemCount = itemCount; }
+
+    public List<User> getSellersList() {
+        return sellersList;
+    }
+
+    public void setSellersList(List<User> sellersList) {
+        this.sellersList = sellersList;
+    }
 }

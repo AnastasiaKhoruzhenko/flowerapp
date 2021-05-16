@@ -3,11 +3,14 @@ package com.hse.flowerapp.service.impl;
 import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.AddressDto;
 import com.hse.flowerapp.repository.*;
+import com.hse.flowerapp.security.jwt.JwtTokenProvider;
 import com.hse.flowerapp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +24,6 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final ItemRepository itemRepository;
     private final OrderRepository orderRepository;
-    private final RoleRepository roleRepository;
     private final ReviewRepository reviewRepository;
     private final ShopRepository shopRepository;
     private final AddressRepository addressRepository;
@@ -29,12 +31,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,
                            ItemRepository itemRepository, OrderRepository orderRepository,
-                           RoleRepository roleRepository, ReviewRepository reviewRepository, ShopRepository shopRepository, AddressRepository addressRepository) {
+                           ReviewRepository reviewRepository, ShopRepository shopRepository, AddressRepository addressRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.itemRepository = itemRepository;
         this.orderRepository = orderRepository;
-        this.roleRepository = roleRepository;
         this.reviewRepository = reviewRepository;
         this.shopRepository = shopRepository;
         this.addressRepository = addressRepository;
@@ -53,24 +54,32 @@ public class UserServiceImpl implements UserService {
         // Если продавец
         switch (role) {
             case "ROLE_SELLER": {
-                List<Role> roleList = new ArrayList<>();
-                Role roleUser = roleRepository.findByName(role);
-                roleList.add(roleUser);
-
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
 
                 user.setOrderList(orderList);
                 user.setReviewList(reviewList);
-                //customer.setItemList(itemList);
                 user.setStatus(Status.ACTIVE);
                 user.setCreated(date);
                 user.setUpdated(date);
                 user.setBonuses(0);
                 user.setAllowPush(true);
-                //customer.setUser_rate(0);
-                //customer.setShopName(null);
-                //customer.setCountry(null);
-                user.setRoleList(roleList);
+
+                user.setRole(role);
+
+                JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+                String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+                token = token.substring(7);
+                String username = jwtTokenProvider.getUsername(token);
+                User owner = userRepository.findByEmail(username);
+                log.info(owner.getEmail());
+
+                user.setWorkShop(owner.getShop());
+
+                List<User> userList = shopRepository.getShopById(owner.getShop().getId()).getSellersList();
+                userList.add(user);
+                Shop shop = shopRepository.getShopById(owner.getShop().getId());
+                shop.setSellersList(userList);
+                shopRepository.save(shop);
 
                 //todo: Проверка пароля и логина
 
@@ -79,8 +88,6 @@ public class UserServiceImpl implements UserService {
                 return regUser;
             }
             case "ROLE_USER": {
-                Role roleUser = roleRepository.findByName("ROLE_USER");
-
                 Cart cart = new Cart();
                 cart.setTotalSum(0);
                 cart.setDiscountSum(0);
@@ -88,9 +95,9 @@ public class UserServiceImpl implements UserService {
 
                 user.setCart(cart);
                 cart.setUser(user);
-                List<Role> roleList = new ArrayList<>();
-                roleList.add(roleUser);
-                user.setRoleList(roleList);
+
+                user.setRole(role);
+
 
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setOrderList(orderList);
@@ -104,13 +111,11 @@ public class UserServiceImpl implements UserService {
                 //todo: Проверка пароля и логина
 
                 User regUser = userRepository.save(user);
+
                 log.info("IN register user USER was registered successfully:");
                 return regUser;
             }
             case "ROLE_OWNER": {
-                List<Role> roleList = new ArrayList<>();
-                Role roleUser = roleRepository.findByName(role);
-                roleList.add(roleUser);
 
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -121,7 +126,7 @@ public class UserServiceImpl implements UserService {
                 user.setUpdated(date);
                 user.setBonuses(0);
                 user.setAllowPush(true);
-                user.setRoleList(roleList);
+                user.setRole(role);
 
                 //todo: Проверка пароля и логина
 

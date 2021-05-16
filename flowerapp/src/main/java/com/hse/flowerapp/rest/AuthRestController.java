@@ -1,6 +1,5 @@
 package com.hse.flowerapp.rest;
 
-import com.hse.flowerapp.domain.Role;
 import com.hse.flowerapp.domain.User;
 import com.hse.flowerapp.dto.*;
 import com.hse.flowerapp.security.jwt.JwtTokenProvider;
@@ -13,11 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/auth/")
@@ -37,7 +34,7 @@ public class AuthRestController {
     @PostMapping("login")
     public ResponseEntity login(@Validated AuthRequestDto requestDto) {
         try {
-            log.info(requestDto.getUsername()+"    "+requestDto.getPassword());
+            log.info(requestDto.getUsername()+"  cheeeck  "+requestDto.getPassword());
             String username = requestDto.getUsername();
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
@@ -46,14 +43,16 @@ public class AuthRestController {
             if (user == null)
                 return ResponseEntity.ok(new ErrorDto(true, "login", "Такой пользователь не найден"));
 
-            List<Role> roleList = user.getRoleList();
+            String role = user.getRole();
+
             log.info("before generating token " + username);
-            String token = jwtTokenProvider.createToken(username, roleList);
+            String token = jwtTokenProvider.createToken(username, role);
 
             log.info(username + "    " + token);
             LoginResponseDto response = new LoginResponseDto();
             response.setUsername(username);
             response.setToken(token);
+            response.setRole(role);
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

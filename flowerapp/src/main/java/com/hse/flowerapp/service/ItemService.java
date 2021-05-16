@@ -14,7 +14,7 @@ public interface ItemService {
 
     Item addItemToShop(ItemDto itemDto);
 
-    Item updateItemInfo(ItemDto itemDto);
+    ItemDto updateItemInfo(ItemDto itemDto);
 
     List<ItemDto> getAllItemsOfShop(Long id);
 }

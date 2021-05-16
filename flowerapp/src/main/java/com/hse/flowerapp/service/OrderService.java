@@ -15,5 +15,7 @@ public interface OrderService {
 
     OrderDto cancelOrder(OrderDto orderDto);
 
+    List<OrderDto> getAllShopOrders(Long id);
+
 
 }

@@ -1,12 +1,12 @@
 package com.hse.flowerapp.dto;
 
 import com.hse.flowerapp.domain.Order;
+import com.hse.flowerapp.domain.OrderItem;
 import com.hse.flowerapp.domain.OrderStatus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class OrderDto {
      Long orderId;
@@ -20,7 +20,7 @@ public class OrderDto {
      String email;
      String phone;
      Long userId;
-     String sectretName;
+     String secretName;
      String secretPhone;
      Boolean addPostcard;
      String postcardText;
@@ -32,9 +32,8 @@ public class OrderDto {
      String house;
      String building;
      String flat;
-
-    // мапа "id" и "количество таких элементов"
-     //Map<String, String> listItemIds = new HashMap<String, String>();
+     Date updatedDate;
+     Long shopId;
 
     List<Long> listIds = new ArrayList<>();
     List<Integer> listCount = new ArrayList<>();
@@ -143,12 +142,12 @@ public class OrderDto {
         this.userId = userId;
     }
 
-    public String getSectretName() {
-        return sectretName;
+    public String getSecretName() {
+        return secretName;
     }
 
-    public void setSectretName(String sectretName) {
-        this.sectretName = sectretName;
+    public void setSecretName(String secretName) {
+        this.secretName = secretName;
     }
 
     public String getSecretPhone() {
@@ -239,6 +238,22 @@ public class OrderDto {
         this.flat = flat;
     }
 
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
+
     public static OrderDto convertToOrderDto(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setOrderId(order.getId());
@@ -251,7 +266,7 @@ public class OrderDto {
         orderDto.setName(order.getName());
         orderDto.setEmail(order.getEmail());
         orderDto.setPhone(order.getPhone());
-        orderDto.setSectretName(order.getSectretName());
+        orderDto.setSecretName(order.getSectretName());
         orderDto.setSecretPhone(order.getSecretPhone());
         orderDto.setAddPostcard(order.getAddPostcard());
         orderDto.setPostcardText(order.getPostcardText());
@@ -264,7 +279,21 @@ public class OrderDto {
         orderDto.setHouse(order.getHouse());
         orderDto.setBuilding(order.getBuilding());
         orderDto.setFlat(order.getFlat());
-        //orderDto.setListItemIds(order.getCountItemInOrder());
+
+        orderDto.setUpdatedDate(order.getUpdated());
+
+        orderDto.setShopId(order.getShopId());
+
+        List<Long> idsList = new ArrayList<>();
+        List<Integer> countList = new ArrayList<>();
+        for(OrderItem orderItem : order.getCountItemInOrder()) {
+            idsList.add(orderItem.getItem().getId());
+            countList.add(orderItem.getCountOfThisItemInOrder());
+        }
+
+        orderDto.setListIds(idsList);
+        orderDto.setListCount(countList);
+
         return orderDto;
     }
 }

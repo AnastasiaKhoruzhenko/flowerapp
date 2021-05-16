@@ -26,6 +26,7 @@ public class RegisterUserDto {
         user.setPassword(password);
         user.setAllowPush(true);
         user.setBonuses(0);
+        user.setRole(role);
 
         return user;
     }

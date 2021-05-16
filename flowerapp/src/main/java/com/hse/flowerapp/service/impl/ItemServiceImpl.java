@@ -57,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item updateItemInfo(ItemDto itemDto) {
+    public ItemDto updateItemInfo(ItemDto itemDto) {
         Item item = itemRepository.getItemById(itemDto.getItemId());
         item.setName(itemDto.getName());
         item.setShortDescription(itemDto.getShortDescription());
@@ -65,16 +65,22 @@ public class ItemServiceImpl implements ItemService {
         item.setWidth(itemDto.getWidth());
         item.setHeight(itemDto.getHeight());
         item.setPrice(itemDto.getPrice());
-        item.setSize(itemDto.getSize());
+        switch (itemDto.getSize()){
+            case "Маленький": item.setSize("SMALL");break;
+            case "Средний":item.setSize("AVERAGE"); break;
+            case "Большой": item.setSize("BIG");break;
+        }
         item.setAvailable(itemDto.getAvailable());
 
         item.setPhotoURL(itemDto.getPhotoUrl());
         item.setDiscount(itemDto.getDiscount());
         item.setDiscountPrice(itemDto.getDiscountPrice());
 
+        item.setCategoryName(itemDto.getCategoryName());
+
         itemRepository.save(item);
 
-        return item;
+        return convertToDTO(item);
     }
 
     @Override
@@ -103,6 +109,7 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setAvailable(item.getAvailable());
         itemDto.setCategoryName(item.getCategoryName());
         itemDto.setFlowers(item.getFlowers());
+        itemDto.setShopId(item.getShop().getId());
 
         return itemDto;
     }

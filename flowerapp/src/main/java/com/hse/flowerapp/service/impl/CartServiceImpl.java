@@ -153,9 +153,6 @@ public class CartServiceImpl implements CartService {
 
         int count = cartItemList.size();
 
-        log.info(cartItemList.get(0).toString());
-        log.info(cartItemList.get(1).toString());
-
         for (int i = 0; i < count; i++) {
             ItemCart itemCart = cartItemList.get(0);
 

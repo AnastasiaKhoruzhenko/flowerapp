@@ -177,23 +177,4 @@ public class UserRestController {
 
         return ResponseEntity.ok(shopInfoDto2);
     }
-
-//    // добавление адреса магазина (сразу после пустого создания)
-//    @PostMapping(value = "address")
-//    public ResponseEntity createPersonalAddress(@RequestBody AddressDto addressDto){
-//        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
-//        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
-//        token = token.substring(7);
-//        String username = jwtTokenProvider.getUsername(token);
-//        User user = userService.findByEmail(username);
-//
-//        Address address = userService.createPersonalAddress(addressDto);
-//        addressDto.setUserId(user.getId());
-//        addressDto.setShopId(user.getShop().getId());
-//
-//        if(address == null)
-//            return ResponseEntity.ok(new ErrorDto(true, "address", "address creation failed"));
-//
-//        return ResponseEntity.ok(address);
-//    }
 }
