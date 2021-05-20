@@ -102,4 +102,26 @@ public class ItemDto {
     public void setFlowers(String flowers) {
         this.flowers = flowers;
     }
+
+    public static ItemDto convertToDTO(Item item){
+        ItemDto itemDto = new ItemDto();
+
+        itemDto.setItemId(item.getId());
+        itemDto.setPhotoUrl(item.getPhotoURL());
+        itemDto.setHeight(item.getHeight());
+        itemDto.setWidth(item.getWidth());
+        itemDto.setShortDescription(item.getShortDescription());
+        itemDto.setFullDescription(item.getFullDescription());
+        itemDto.setSize(item.getSize());
+        itemDto.setName(item.getName());
+        itemDto.setPrice(item.getPrice());
+        itemDto.setDiscount(item.getDiscount());
+        itemDto.setDiscountPrice(item.getDiscountPrice());
+        itemDto.setAvailable(item.getAvailable());
+        itemDto.setCategoryName(item.getCategoryName());
+        itemDto.setFlowers(item.getFlowers());
+        itemDto.setShopId(item.getShop().getId());
+
+        return itemDto;
+    }
 }

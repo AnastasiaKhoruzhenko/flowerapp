@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Slf4j
 public class ShopServiceImpl implements ShopService {
@@ -34,16 +37,28 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    public List<ShopDto> getAllShops() {
+        List<Shop> shopList = shopRepository.findAll();
+        List<ShopDto> shopDtoList = new ArrayList<>();
+        for (Shop shop : shopList) {
+            shopDtoList.add(convertToDTO(shop));
+        }
+
+        return shopDtoList;
+    }
+
+    @Override
     public ShopDto convertToDTO(Shop shop) {
         ShopDto shopDto = new ShopDto();
+
+        shopDto.setShopId(Integer.valueOf(shop.getId().toString()));
 
         shopDto.setDeliveryPrice(shop.getDeliveryPrice());
         shopDto.setOpenTime(shop.getOpenTime());
         shopDto.setRating(shop.getRating());
         shopDto.setShopName(shop.getName());
         shopDto.setDescription(shop.getDescription());
-        //shopDto.setAddressId(shop.getShopAddress().getId());
-        //shopDto.setUserId(shop.getUser().getId());
+        shopDto.setStatus(shop.getStatus().toString());
         shopDto.setItemCount(shop.getItemCount());
 
         return shopDto;

@@ -68,30 +68,9 @@ public class Item extends BaseEntity{
     @Column(name = "flowers")
     String flowers;
 
-//    @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
-//    private List<User> userList;
-
-//    @ManyToMany(mappedBy = "itemList", fetch = FetchType.LAZY)
-//    private List<Order> orderList = new ArrayList<>();
-
-    // khor worked
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @Fetch(value = FetchMode.SUBSELECT)
-//    @JoinTable(name = "item_category",
-//            joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name = "category_id", referencedColumnName = "id")})
-//    private List<Category> categoryList = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name="shop_id")
     private Shop shop;
-
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @Fetch(value = FetchMode.SUBSELECT)
-//    @JoinTable(name = "item_cart",
-//            joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
-//            inverseJoinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "id")})
-//    private List<Cart> cartList = new ArrayList<>();
 
     @OneToMany(mappedBy = "item")
     List<ItemCart> countItemInCarts = new ArrayList<>();
@@ -201,30 +180,6 @@ public class Item extends BaseEntity{
     public void setAvailable(Boolean available) {
         this.available = available;
     }
-
-//    public List<User> getUserList() {
-//        return userList;
-//    }
-//
-//    public void setUserList(List<User> userList) {
-//        this.userList = userList;
-//    }
-
-//    public List<Order> getOrderList() {
-//        return orderList;
-//    }
-//
-//    public void setOrderList(List<Order> orderList) {
-//        this.orderList = orderList;
-//    }
-
-//    public List<Category> getCategoryList() {
-//        return categoryList;
-//    }
-//
-//    public void setCategoryList(List<Category> categoryList) {
-//        this.categoryList = categoryList;
-//    }egt
 
     public Shop getShop() { return shop; }
 

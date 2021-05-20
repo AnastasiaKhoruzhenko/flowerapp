@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
+    private Long userId;
     private String name;
     private String surname;
     private String email;
@@ -18,6 +19,7 @@ public class UserDto {
     private Integer bonuses;
     private Boolean allowPush;
     private String phone;
+    private Integer workShop;
 
     public User toUser() {
         User user = new User();
@@ -89,6 +91,13 @@ public class UserDto {
             userDto.setPhone(user.getPhone());
         else
             userDto.setPhone(null);
+
+        if(user.getWorkShop() != null)
+            userDto.setWorkShop(Integer.valueOf(user.getWorkShop().getId().toString()));
+        else
+            userDto.setWorkShop(null);
+
+        userDto.setUserId(user.getId());
 
         return userDto;
     }

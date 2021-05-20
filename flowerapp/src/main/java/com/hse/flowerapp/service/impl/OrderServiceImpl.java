@@ -1,6 +1,8 @@
 package com.hse.flowerapp.service.impl;
 
 import com.hse.flowerapp.domain.*;
+import com.hse.flowerapp.dto.ChangeOrderStatusDto;
+import com.hse.flowerapp.dto.ItemDto;
 import com.hse.flowerapp.dto.OrderDto;
 import com.hse.flowerapp.repository.*;
 import com.hse.flowerapp.service.OrderService;
@@ -134,5 +136,35 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderDtoList;
+    }
+
+    @Override
+    public OrderDto changeOrderStatus(Long order_id, OrderStatus orderStatus) {
+        Order order = orderRepository.getById(order_id);
+        order.setOrderStatus(orderStatus);
+        orderRepository.save(order);
+
+        return OrderDto.convertToOrderDto(order);
+    }
+
+    @Override
+    public OrderDto takeOrder(Long order_id, Integer seller_id) {
+        Order order = orderRepository.getById(order_id);
+        order.setOrderStatus(OrderStatus.SELLERADDED);
+        order.setSellerId(seller_id);
+        orderRepository.save(order);
+        return OrderDto.convertToOrderDto(order);
+    }
+
+    @Override
+    public List<ItemDto> getAllOrderItems(Long order_id) {
+        Order order = orderRepository.getById(order_id);
+        List<OrderItem> itemList = order.getCountItemInOrder();
+        List<ItemDto> itemDtoList = new ArrayList<>();
+        for (OrderItem orderItem: itemList) {
+            itemDtoList.add(ItemDto.convertToDTO(orderItem.getItem()));
+        }
+
+        return itemDtoList;
     }
 }

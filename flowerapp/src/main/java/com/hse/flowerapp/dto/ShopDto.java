@@ -7,6 +7,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopDto {
     Long userId;
+    Integer shopId;
     Long addressId;
     String shopName;
     String description;
@@ -14,6 +15,7 @@ public class ShopDto {
     Integer deliveryPrice;
     String openTime;
     Integer itemCount;
+    String status;
 
     public Long getUserId() {
         return userId;
@@ -74,4 +76,20 @@ public class ShopDto {
     public Integer getItemCount() { return itemCount; }
 
     public void setItemCount(Integer itemCount) { this.itemCount = itemCount; }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

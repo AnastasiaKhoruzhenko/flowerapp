@@ -98,6 +98,12 @@ public class Order extends BaseEntity {
     @Column(name = "shop_id")
     Long shopId;
 
+    @Column(name = "seller_id")
+    Integer sellerId;
+
+    @Column(name = "is_rated")
+    Boolean isRated = false;
+
     public Long getId() {
         return id;
     }
@@ -300,5 +306,21 @@ public class Order extends BaseEntity {
 
     public void setShopId(Long shopId) {
         this.shopId = shopId;
+    }
+
+    public Integer getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Integer sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public Boolean getRated() {
+        return isRated;
+    }
+
+    public void setRated(Boolean rated) {
+        isRated = rated;
     }
 }

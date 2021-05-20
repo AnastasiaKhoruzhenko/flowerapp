@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -70,6 +71,11 @@ public class UserRestController {
         userService.saveUser(user);
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping(value = "shops")
+    public ResponseEntity getAllShops(){
+        return ResponseEntity.ok(shopService.getAllShops());
     }
 
     @GetMapping(value = "get/{id}")

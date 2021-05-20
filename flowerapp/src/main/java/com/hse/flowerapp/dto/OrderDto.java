@@ -34,6 +34,8 @@ public class OrderDto {
      String flat;
      Date updatedDate;
      Long shopId;
+     Integer sellerId;
+     Boolean isRated;
 
     List<Long> listIds = new ArrayList<>();
     List<Integer> listCount = new ArrayList<>();
@@ -254,6 +256,22 @@ public class OrderDto {
         this.shopId = shopId;
     }
 
+    public Integer getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Integer sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public Boolean getIsRated() {
+        return isRated;
+    }
+
+    public void setIsRated(Boolean isRated) {
+        this.isRated = isRated;
+    }
+
     public static OrderDto convertToOrderDto(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setOrderId(order.getId());
@@ -283,6 +301,7 @@ public class OrderDto {
         orderDto.setUpdatedDate(order.getUpdated());
 
         orderDto.setShopId(order.getShopId());
+        orderDto.setSellerId(order.getSellerId());
 
         List<Long> idsList = new ArrayList<>();
         List<Integer> countList = new ArrayList<>();
@@ -293,6 +312,8 @@ public class OrderDto {
 
         orderDto.setListIds(idsList);
         orderDto.setListCount(countList);
+
+        orderDto.setIsRated(order.getIsRated());
 
         return orderDto;
     }

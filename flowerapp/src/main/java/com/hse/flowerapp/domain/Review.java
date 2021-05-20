@@ -24,11 +24,16 @@ public class Review extends BaseEntity {
 
     @NotNull
     @Column(name = "product_grade")
-    private Integer productGrade;
+    private Integer grade;
 
-    // пользователь и отзыв
-    @ManyToOne(cascade=CascadeType.ALL)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "item_id")
+    private Long itemId;
+
+    @Column(name = "order_id")
+    private Long orderId;
 
     public String getHeader() {
         return header;
@@ -54,19 +59,35 @@ public class Review extends BaseEntity {
         this.id = id;
     }
 
-    public Integer getProductGrade() {
-        return productGrade;
+    public Integer getGrade() {
+        return grade;
     }
 
-    public void setProductGrade(Integer productGrade) {
-        this.productGrade = productGrade;
+    public void setGrade(Integer productGrade) {
+        this.grade = productGrade;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }

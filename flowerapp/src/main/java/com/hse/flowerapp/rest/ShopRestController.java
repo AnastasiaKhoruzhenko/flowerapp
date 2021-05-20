@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -50,6 +51,7 @@ public class ShopRestController {
         itemDto.setUserId(user.getId());
         itemDto.setShopId(user.getShop().getId());
         Item item = itemService.addItemToShop(itemDto);
+        itemDto.setItemId(item.getId());
 
         return ResponseEntity.ok(itemDto);
     }
@@ -171,5 +173,35 @@ public class ShopRestController {
         List<OrderDto> listOrders = orderService.getAllShopOrders(shopId);
 
         return ResponseEntity.ok(listOrders);
+    }
+
+    @GetMapping(value = "info")
+    public ResponseEntity getShopInfo(){
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        ShopDto shopDto = shopService.convertToDTO(user.getShop());
+
+        return ResponseEntity.ok(shopDto);
+    }
+
+    @GetMapping(value = "sellers")
+    public ResponseEntity getShopSellers(){
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        List<User> sellersList = user.getShop().getSellersList();
+        List<UserDto> sellersDtoList = new ArrayList<>();
+        for (User seller : sellersList) {
+            sellersDtoList.add(UserDto.toUserDto(seller));
+        }
+
+        return ResponseEntity.ok(sellersDtoList);
     }
 }
