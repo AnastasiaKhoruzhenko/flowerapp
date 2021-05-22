@@ -68,6 +68,12 @@ public class Item extends BaseEntity{
     @Column(name = "flowers")
     String flowers;
 
+    @Column(name = "rating")
+    Float rating = 0.0f;
+
+    @Column(name = "review_count")
+    Integer reviewCount = 0;
+
     @ManyToOne
     @JoinColumn(name="shop_id")
     private Shop shop;
@@ -215,5 +221,21 @@ public class Item extends BaseEntity{
 
     public void setFlowers(String flowers) {
         this.flowers = flowers;
+    }
+
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
     }
 }

@@ -307,7 +307,6 @@ public class CartServiceImpl implements CartService {
         for(ItemCart itemCart: itemCartList){
             if(itemCart.getItem().getId().equals(item_id)){
                 itemCart.setCountOfThisItemInCart(itemCart.getCountOfThisItemInCart() - 1);
-
                 cart.setTotalCount(cart.getTotalCount() - 1);
                 cart.setTotalSum(cart.getTotalSum() - itemCart.getItem().getPrice());
                 if(itemCart.getItem().getDiscountPrice() != null)

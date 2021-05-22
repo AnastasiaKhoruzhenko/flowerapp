@@ -1,9 +1,11 @@
 package com.hse.flowerapp.service.impl;
 
+import com.hse.flowerapp.domain.Item;
 import com.hse.flowerapp.domain.Order;
 import com.hse.flowerapp.domain.Review;
 import com.hse.flowerapp.domain.Status;
 import com.hse.flowerapp.dto.ReviewDto;
+import com.hse.flowerapp.repository.ItemRepository;
 import com.hse.flowerapp.repository.OrderRepository;
 import com.hse.flowerapp.repository.ReviewRepository;
 import com.hse.flowerapp.service.ReviewService;
@@ -19,11 +21,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, OrderRepository orderRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, OrderRepository orderRepository, ItemRepository itemRepository) {
         this.reviewRepository = reviewRepository;
         this.orderRepository = orderRepository;
+        this.itemRepository = itemRepository;
     }
 
 
@@ -45,6 +49,14 @@ public class ReviewServiceImpl implements ReviewService {
         Order order = orderRepository.getById(reviewDto.getOrderId());
         order.setIsRated(true);
         orderRepository.save(order);
+
+        Item item = itemRepository.getItemById(reviewDto.getItemId());
+        Integer count = item.getReviewCount();
+        Float rating = item.getRating();
+
+        item.setRating((rating*count + reviewDto.getGrade())/(count + 1));
+        item.setReviewCount(count + 1);
+        itemRepository.save(item);
 
         return reviewDto;
     }

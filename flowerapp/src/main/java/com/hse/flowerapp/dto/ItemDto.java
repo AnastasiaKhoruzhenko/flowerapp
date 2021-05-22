@@ -26,8 +26,8 @@ public class ItemDto {
     private Boolean available;
     private String categoryName;
     private String flowers;
-
-
+    private Float rating;
+    private Integer reviewCount;
 
     public Long getShopId() { return shopId; }
 
@@ -103,6 +103,22 @@ public class ItemDto {
         this.flowers = flowers;
     }
 
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
     public static ItemDto convertToDTO(Item item){
         ItemDto itemDto = new ItemDto();
 
@@ -121,6 +137,8 @@ public class ItemDto {
         itemDto.setCategoryName(item.getCategoryName());
         itemDto.setFlowers(item.getFlowers());
         itemDto.setShopId(item.getShop().getId());
+        itemDto.setRating(item.getRating());
+        itemDto.setReviewCount(item.getReviewCount());
 
         return itemDto;
     }
