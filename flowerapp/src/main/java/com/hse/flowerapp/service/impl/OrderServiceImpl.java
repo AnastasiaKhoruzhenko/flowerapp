@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setStreet(orderDto.getStreet());
         newOrder.setHouse(orderDto.getHouse());
 
-        Long shop_id = itemRepository.getItemById(orderDto.getListIds().get(0)).getId();
+        Long shop_id = itemRepository.getItemById(orderDto.getListIds().get(0)).getShop().getId();
         newOrder.setShopId(shop_id);
 
         Date date = new Date();
@@ -153,7 +153,10 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.SELLERADDED);
         order.setSellerId(seller_id);
         orderRepository.save(order);
-        return OrderDto.convertToOrderDto(order);
+        OrderDto orderDto = OrderDto.convertToOrderDto(order);
+        orderDto.setSellerName(userRepository.getById(Long.valueOf(orderDto.getSellerId().toString())).getName() + " " +
+                userRepository.getById(Long.valueOf(orderDto.getSellerId().toString())).getSurname());
+        return orderDto;
     }
 
     @Override

@@ -45,6 +45,17 @@ public class UserRestController {
         return ResponseEntity.ok(UserDto.toUserDto(userService.findByEmail(jwtTokenProvider.getUsername(token))));
     }
 
+    @GetMapping(value = "{id}")
+    public ResponseEntity<UserDto> getByUserId(@PathVariable("id") Integer id) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        log.info(id.toString());
+
+        return ResponseEntity.ok(UserDto.toUserDto(userService.findById(Long.valueOf(id))));
+    }
+
     // добавить информации о пользователе
     @PostMapping(value = "info")
     public ResponseEntity setUserInfo(@Validated UserDto userDto){

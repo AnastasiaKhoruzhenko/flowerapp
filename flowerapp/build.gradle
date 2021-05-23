@@ -34,6 +34,8 @@ dependencies {
 	implementation group: 'mysql', name: 'mysql-connector-java'
 
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	implementation 'org.springframework.data:spring-data-mongodb:1.7.2.RELEASE'
 }
 
 test {

@@ -3,6 +3,7 @@ package com.hse.flowerapp.dto;
 import com.hse.flowerapp.domain.Order;
 import com.hse.flowerapp.domain.OrderItem;
 import com.hse.flowerapp.domain.OrderStatus;
+import com.hse.flowerapp.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,7 @@ public class OrderDto {
      Long shopId;
      Integer sellerId;
      Boolean isRated;
+     String sellerName;
 
     List<Long> listIds = new ArrayList<>();
     List<Integer> listCount = new ArrayList<>();
@@ -272,6 +274,22 @@ public class OrderDto {
         this.isRated = isRated;
     }
 
+    public Boolean getRated() {
+        return isRated;
+    }
+
+    public void setRated(Boolean rated) {
+        isRated = rated;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
     public static OrderDto convertToOrderDto(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setOrderId(order.getId());
@@ -302,6 +320,8 @@ public class OrderDto {
 
         orderDto.setShopId(order.getShopId());
         orderDto.setSellerId(order.getSellerId());
+
+        orderDto.setUserId(order.getUser().getId());
 
         List<Long> idsList = new ArrayList<>();
         List<Integer> countList = new ArrayList<>();

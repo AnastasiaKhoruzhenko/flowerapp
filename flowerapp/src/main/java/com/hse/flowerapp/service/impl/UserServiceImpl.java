@@ -155,11 +155,6 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         User user = userRepository.getById(id);
 
-        if (user == null)
-            log.info("IN findById user with id: {} do not exist", id);
-        else
-            log.info("IN findById user was found successfully: {}", user.toString());
-
         return user;
     }
 

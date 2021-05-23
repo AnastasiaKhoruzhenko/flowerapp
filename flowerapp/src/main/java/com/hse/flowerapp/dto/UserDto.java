@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hse.flowerapp.domain.User;
 import lombok.Data;
 
-import java.time.LocalDate;
-
-// todo: Добавть поля необходимые для отображения
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
@@ -20,6 +16,7 @@ public class UserDto {
     private Boolean allowPush;
     private String phone;
     private Integer workShop;
+    private String role;
 
     public User toUser() {
         User user = new User();
@@ -98,6 +95,8 @@ public class UserDto {
             userDto.setWorkShop(null);
 
         userDto.setUserId(user.getId());
+
+        userDto.setRole(user.getRole());
 
         return userDto;
     }
