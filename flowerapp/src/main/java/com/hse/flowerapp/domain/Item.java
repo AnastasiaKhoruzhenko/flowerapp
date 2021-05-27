@@ -78,6 +78,9 @@ public class Item extends BaseEntity{
     @JoinColumn(name="shop_id")
     private Shop shop;
 
+    @Column(name = "ordered_times")
+    private Integer orderedTimes = 0;
+
     @OneToMany(mappedBy = "item")
     List<ItemCart> countItemInCarts = new ArrayList<>();
 
@@ -89,6 +92,8 @@ public class Item extends BaseEntity{
         setCreated(date);
         setUpdated(date);
         setStatus(Status.ACTIVE);
+        setOrderedTimes(0);
+        setReviewCount(0);
     }
 
     public Long getId() {
@@ -237,5 +242,13 @@ public class Item extends BaseEntity{
 
     public void setReviewCount(Integer reviewCount) {
         this.reviewCount = reviewCount;
+    }
+
+    public Integer getOrderedTimes() {
+        return orderedTimes;
+    }
+
+    public void setOrderedTimes(Integer orderedTimes) {
+        this.orderedTimes = orderedTimes;
     }
 }

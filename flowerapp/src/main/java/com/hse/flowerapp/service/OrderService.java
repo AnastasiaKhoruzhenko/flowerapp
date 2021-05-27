@@ -25,5 +25,4 @@ public interface OrderService {
     OrderDto takeOrder(Long order_id, Integer seller_id);
 
     List<ItemDto> getAllOrderItems(Long order_id);
-
 }

@@ -79,7 +79,11 @@ public class OrderRestController {
         String username = jwtTokenProvider.getUsername(token);
         User user = userService.findByEmail(username);
 
-        return ResponseEntity.ok(orderService.getItemById(id));
+        OrderDto orderDto = orderService.getItemById(id);
+        orderDto.setSellerName(userService.findById(Long.valueOf(orderDto.getSellerId().toString())).getName() + " " +
+                userService.findById(Long.valueOf(orderDto.getSellerId().toString())).getSurname());
+
+        return ResponseEntity.ok(orderDto);
     }
 
     @PostMapping(value = "status")

@@ -142,6 +142,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto changeOrderStatus(Long order_id, OrderStatus orderStatus) {
         Order order = orderRepository.getById(order_id);
         order.setOrderStatus(orderStatus);
+
+        if(orderStatus == OrderStatus.DELIVERED) {
+            List<ItemDto> itemList = getAllOrderItems(order_id);
+            for (ItemDto itemDto : itemList) {
+                Item item = itemRepository.getItemById(itemDto.getItemId());
+                item.setOrderedTimes(item.getOrderedTimes() + 1);
+                itemRepository.save(item);
+            }
+
+        }
         orderRepository.save(order);
 
         return OrderDto.convertToOrderDto(order);

@@ -1,8 +1,12 @@
 package com.hse.flowerapp.service.impl;
 
+import com.hse.flowerapp.domain.Address;
 import com.hse.flowerapp.domain.Shop;
+import com.hse.flowerapp.domain.Status;
+import com.hse.flowerapp.dto.AddressDto;
 import com.hse.flowerapp.dto.ShopDto;
 import com.hse.flowerapp.dto.ShopInfoDto;
+import com.hse.flowerapp.repository.AddressRepository;
 import com.hse.flowerapp.repository.ShopRepository;
 import com.hse.flowerapp.repository.UserRepository;
 import com.hse.flowerapp.service.ShopService;
@@ -19,11 +23,13 @@ public class ShopServiceImpl implements ShopService {
 
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public ShopServiceImpl(ShopRepository shopRepository, UserRepository userRepository) {
+    public ShopServiceImpl(ShopRepository shopRepository, UserRepository userRepository, AddressRepository addressRepository) {
         this.shopRepository = shopRepository;
         this.userRepository = userRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -45,6 +51,36 @@ public class ShopServiceImpl implements ShopService {
         }
 
         return shopDtoList;
+    }
+
+    @Override
+    public List<ShopDto> getAllRequestShops() {
+        List<Shop> shopList = shopRepository.findAll();
+        List<ShopDto> shopDtoList = new ArrayList<>();
+        for (Shop shop : shopList) {
+            if(shop.getStatus() == Status.ON_CONFIRMATION)
+                shopDtoList.add(convertToDTO(shop));
+        }
+
+        return shopDtoList;
+    }
+
+    @Override
+    public ShopDto getShopInfo(Integer id) {
+        Shop shop = shopRepository.getShopById(Long.valueOf(id));
+        AddressDto address = AddressDto.toDto(addressRepository.getAddressById(Long.valueOf(id)));
+        ShopDto shopDto = convertToDTO(shop);
+        shopDto.setAddress(address);
+        return shopDto;
+    }
+
+    @Override
+    public ShopDto confirmShop(Long id) {
+        Shop shop = shopRepository.getShopById(id);
+        shop.setStatus(Status.ACTIVE);
+        shopRepository.save(shop);
+
+        return convertToDTO(shop);
     }
 
     @Override

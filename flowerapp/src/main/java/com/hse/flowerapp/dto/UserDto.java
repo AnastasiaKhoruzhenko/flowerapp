@@ -3,8 +3,10 @@ package com.hse.flowerapp.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hse.flowerapp.domain.User;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     private Long userId;
@@ -58,6 +60,10 @@ public class UserDto {
     }
 
     public static UserDto toUserDto(User user) {
+        log.info(user.getName());
+        log.info(user.getPassword());
+        log.info(user.getEmail());
+        log.info(user.getRole());
         UserDto userDto = new UserDto();
 
         if(user.getName() != null)

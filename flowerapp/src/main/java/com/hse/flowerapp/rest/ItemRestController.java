@@ -47,7 +47,8 @@ public class ItemRestController {
     @PostMapping(value = "rate")
     public ResponseEntity rateItem(@Validated ReviewDto reviewDto){
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
-        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest().getHeader("Authorization");
         token = token.substring(7);
         String username = jwtTokenProvider.getUsername(token);
         User user = userService.findByEmail(username);

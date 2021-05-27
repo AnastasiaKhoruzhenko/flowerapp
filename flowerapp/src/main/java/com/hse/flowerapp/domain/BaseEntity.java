@@ -10,11 +10,6 @@ import java.util.Date;
 @MappedSuperclass
 @Data
 public class BaseEntity {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     @CreatedDate
     @Column(name = "created")
     private Date created;
@@ -27,10 +22,6 @@ public class BaseEntity {
     @Column(name = "status")
     private Status status;
 
-//    public Long getId() {
-//        return id;
-//    }
-
     public Status getStatus() {
         return status;
     }
@@ -38,6 +29,7 @@ public class BaseEntity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
     public Date getCreated() {
         return created;
     }
@@ -54,3 +46,4 @@ public class BaseEntity {
         this.updated = updated;
     }
 }
+

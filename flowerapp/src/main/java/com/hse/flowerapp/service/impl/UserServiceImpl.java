@@ -135,7 +135,21 @@ public class UserServiceImpl implements UserService {
                 return regUser;
             }
             case "ROLE_ADMIN":
-                break;
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+                user.setOrderList(orderList);
+                user.setStatus(Status.ACTIVE);
+                user.setCreated(date);
+                user.setUpdated(date);
+                user.setBonuses(0);
+                user.setAllowPush(true);
+                user.setRole(role);
+
+                //todo: Проверка пароля и логина
+
+                User regUser = userRepository.save(user);
+                log.info("IN register user ADMIN was registered successfully:");
+                return regUser;
             default:
                 break;
         }

@@ -4,6 +4,7 @@ import com.hse.flowerapp.domain.Shop;
 import com.hse.flowerapp.dto.ShopDto;
 import com.hse.flowerapp.dto.ShopInfoDto;
 import com.hse.flowerapp.dto.UserDto;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,4 +23,10 @@ public interface ShopService {
     Shop convertToEntity(ShopDto shopDto);
 
     List<ShopDto> getAllShops();
+
+    List<ShopDto> getAllRequestShops();
+
+    ShopDto getShopInfo(Integer id);
+
+    ShopDto confirmShop(Long id);
 }

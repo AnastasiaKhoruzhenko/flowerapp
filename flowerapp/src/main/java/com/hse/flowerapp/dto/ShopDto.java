@@ -1,6 +1,7 @@
 package com.hse.flowerapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.hse.flowerapp.domain.Address;
 import lombok.Data;
 
 @Data
@@ -16,6 +17,7 @@ public class ShopDto {
     String openTime;
     Integer itemCount;
     String status;
+    AddressDto address;
 
     public Long getUserId() {
         return userId;
@@ -91,5 +93,13 @@ public class ShopDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public AddressDto getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDto address) {
+        this.address = address;
     }
 }
