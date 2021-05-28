@@ -1,13 +1,9 @@
 package com.hse.flowerapp.rest;
 
-import com.hse.flowerapp.domain.Address;
-import com.hse.flowerapp.domain.Shop;
-import com.hse.flowerapp.domain.User;
+import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.*;
 import com.hse.flowerapp.security.jwt.JwtTokenProvider;
-import com.hse.flowerapp.service.AddressService;
-import com.hse.flowerapp.service.ShopService;
-import com.hse.flowerapp.service.UserService;
+import com.hse.flowerapp.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,12 +24,16 @@ public class UserRestController {
     private final UserService userService;
     private final ShopService shopService;
     private final AddressService addressService;
+    private final FavouriteService favouriteService;
+    private final ItemService itemService;
 
     @Autowired
-    public UserRestController(UserService userService, ShopService shopService, AddressService addressService) {
+    public UserRestController(UserService userService, ShopService shopService, AddressService addressService, FavouriteService favouriteService, ItemService itemService) {
         this.userService = userService;
         this.shopService = shopService;
         this.addressService = addressService;
+        this.favouriteService = favouriteService;
+        this.itemService = itemService;
     }
 
     @GetMapping(value = "getbytoken")
@@ -193,5 +194,69 @@ public class UserRestController {
         ShopInfoDto shopInfoDto2 = shopService.convertShopToShopInfoDto(shop);
 
         return ResponseEntity.ok(shopInfoDto2);
+    }
+
+    @PostMapping(value = "add/favourite")
+    public ResponseEntity addToFavourite(@Validated Long id){
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        List<Item> itemList = userService.addToFavourites(id, user.getId());
+        List<ItemDto> itemDtoList = new ArrayList<>();
+        itemList.forEach(item -> itemDtoList.add(ItemDto.convertToDTO(item)));
+
+        return ResponseEntity.ok(itemDtoList);
+    }
+
+    @PostMapping(value = "remove/favourite")
+    public ResponseEntity removeFromFavourite(@Validated Long id){
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        List<Item> itemList = userService.removeFromFavourites(id, user.getId());
+        List<ItemDto> itemDtoList = new ArrayList<>();
+        itemList.forEach(item -> itemDtoList.add(ItemDto.convertToDTO(item)));
+
+        return ResponseEntity.ok(itemDtoList);
+    }
+
+    @GetMapping(value = "{id}/isitemfavourite")
+    public ResponseEntity isItemFavourite(@PathVariable("id") Long id) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        boolean isInFav = false;
+
+        List<Item> favouriteList = favouriteService.getFavById(user.getFavouriteId()).getItemList();
+        log.info(String.valueOf(favouriteList.size()));
+        isInFav = favouriteList.contains(itemService.getItemById(id));
+        for(Item item: favouriteList){
+            if(item.getId().equals(id)){
+                isInFav = true;
+                break;
+            }
+        }
+        log.info(String.valueOf(isInFav));
+        return ResponseEntity.ok(new BooleanDto(isInFav));
+    }
+
+    @GetMapping(value = "favourites")
+    public ResponseEntity getAllFavourites() {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        return ResponseEntity.ok(userService.getFavouriteList(user.getId()));
     }
 }

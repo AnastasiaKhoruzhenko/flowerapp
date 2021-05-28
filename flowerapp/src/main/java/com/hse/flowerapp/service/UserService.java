@@ -1,10 +1,8 @@
 package com.hse.flowerapp.service;
 
-import com.hse.flowerapp.domain.Address;
-import com.hse.flowerapp.domain.Order;
-import com.hse.flowerapp.domain.Review;
-import com.hse.flowerapp.domain.User;
+import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.AddressDto;
+import com.hse.flowerapp.dto.ItemDto;
 
 import java.util.List;
 
@@ -38,4 +36,10 @@ public interface UserService {
     Address createPersonalAddress(AddressDto addressDto);
 
     void saveUser(User user);
+
+    List<Item> addToFavourites(Long item_id, Long user_id);
+
+    List<Item> removeFromFavourites(Long item_id, Long user_id);
+
+    List<ItemDto> getFavouriteList(Long user_id);
 }

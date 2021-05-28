@@ -2,6 +2,7 @@ package com.hse.flowerapp.service.impl;
 
 import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.AddressDto;
+import com.hse.flowerapp.dto.ItemDto;
 import com.hse.flowerapp.repository.*;
 import com.hse.flowerapp.security.jwt.JwtTokenProvider;
 import com.hse.flowerapp.service.UserService;
@@ -27,11 +28,12 @@ public class UserServiceImpl implements UserService {
     private final ReviewRepository reviewRepository;
     private final ShopRepository shopRepository;
     private final AddressRepository addressRepository;
+    private final FavouriteRepository favouriteRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,
                            ItemRepository itemRepository, OrderRepository orderRepository,
-                           ReviewRepository reviewRepository, ShopRepository shopRepository, AddressRepository addressRepository) {
+                           ReviewRepository reviewRepository, ShopRepository shopRepository, AddressRepository addressRepository, FavouriteRepository favouriteRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.itemRepository = itemRepository;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
         this.reviewRepository = reviewRepository;
         this.shopRepository = shopRepository;
         this.addressRepository = addressRepository;
+        this.favouriteRepository = favouriteRepository;
     }
 
     @Override
@@ -92,6 +95,10 @@ public class UserServiceImpl implements UserService {
                 cart.setTotalSum(0);
                 cart.setDiscountSum(0);
                 cart.setTotalCount(0);
+
+                Favourite favourite = new Favourite();
+                favouriteRepository.save(favourite);
+                user.setFavouriteId(favourite.getId());
 
                 user.setCart(cart);
                 cart.setUser(user);
@@ -301,5 +308,54 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public List<Item> addToFavourites(Long item_id, Long user_id) {
+        Item item = itemRepository.getItemById(item_id);
+        Favourite favourite = favouriteRepository.getById(userRepository.getById(user_id).getFavouriteId());
+
+        List<Item> itemList = favourite.getItemList();
+        List<Favourite> favouriteList = item.getFavouriteList();
+
+        itemList.add(item);
+        favouriteList.add(favourite);
+
+        item.setFavouriteList(favouriteList);
+        favourite.setItemList(itemList);
+
+        itemRepository.save(item);
+        favouriteRepository.save(favourite);
+        return favouriteRepository.getById(userRepository.getById(user_id).getFavouriteId()).getItemList();
+    }
+
+    @Override
+    public List<Item> removeFromFavourites(Long item_id, Long user_id) {
+        Item item = itemRepository.getItemById(item_id);
+        Favourite favourite = favouriteRepository.getById(userRepository.getById(user_id).getFavouriteId());
+
+        List<Item> itemList = favourite.getItemList();
+        List<Favourite> favouriteList = item.getFavouriteList();
+
+        itemList.remove(item);
+        favouriteList.remove(favourite);
+
+        item.setFavouriteList(favouriteList);
+        favourite.setItemList(itemList);
+
+        itemRepository.save(item);
+        favouriteRepository.save(favourite);
+        return favouriteRepository.getById(userRepository.getById(user_id).getFavouriteId()).getItemList();
+    }
+
+    @Override
+    public List<ItemDto> getFavouriteList(Long user_id) {
+        List<Item> itemList = favouriteRepository.getById(userRepository.getById(user_id).getFavouriteId()).getItemList();
+        List<ItemDto> itemDtoList = new ArrayList<>();
+        for(Item item: itemList){
+            itemDtoList.add(ItemDto.convertToDTO(item));
+        }
+
+        return itemDtoList;
     }
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     private Long userId;
+    private Long favouriteId;
     private String name;
     private String surname;
     private String email;
@@ -19,45 +20,6 @@ public class UserDto {
     private String phone;
     private Integer workShop;
     private String role;
-
-    public User toUser() {
-        User user = new User();
-
-        if(name != null)
-            user.setName(name);
-        else
-            user.setName(null);
-
-        if(surname != null)
-            user.setSurname(surname);
-        else
-            user.setSurname(null);
-
-        if(email != null)
-            user.setEmail(email);
-
-        if(birthday != null)
-            user.setBirthday(birthday);
-        else
-            user.setBirthday(null);
-
-        if(bonuses != null)
-            user.setBonuses(bonuses);
-        else
-            user.setBonuses(null);
-
-        if(allowPush != null)
-            user.setAllowPush(allowPush);
-        else
-            user.setAllowPush(null);
-
-        if(phone != null)
-            user.setPhone(phone);
-        else
-            user.setPhone(null);
-
-        return user;
-    }
 
     public static UserDto toUserDto(User user) {
         log.info(user.getName());
@@ -103,6 +65,8 @@ public class UserDto {
         userDto.setUserId(user.getId());
 
         userDto.setRole(user.getRole());
+
+        userDto.setFavouriteId(user.getFavouriteId());
 
         return userDto;
     }

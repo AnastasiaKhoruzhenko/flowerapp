@@ -1,6 +1,7 @@
 package com.hse.flowerapp.rest;
 
 import com.hse.flowerapp.domain.Order;
+import com.hse.flowerapp.domain.OrderStatus;
 import com.hse.flowerapp.domain.User;
 import com.hse.flowerapp.dto.ChangeOrderStatusDto;
 import com.hse.flowerapp.dto.ItemDto;
@@ -80,7 +81,8 @@ public class OrderRestController {
         User user = userService.findByEmail(username);
 
         OrderDto orderDto = orderService.getItemById(id);
-        orderDto.setSellerName(userService.findById(Long.valueOf(orderDto.getSellerId().toString())).getName() + " " +
+        if(orderDto.getOrderStatus() != OrderStatus.CREATED && orderDto.getOrderStatus() != OrderStatus.CANCELED)
+            orderDto.setSellerName(userService.findById(Long.valueOf(orderDto.getSellerId().toString())).getName() + " " +
                 userService.findById(Long.valueOf(orderDto.getSellerId().toString())).getSurname());
 
         return ResponseEntity.ok(orderDto);

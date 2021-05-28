@@ -25,7 +25,6 @@ public class CartServiceImpl implements CartService {
     private final ShopRepository shopRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-
     private final ItemCartRepository itemCartRepository;
 
     @Autowired
@@ -73,6 +72,7 @@ public class CartServiceImpl implements CartService {
             shortItemDto.setName(itemCart.getItem().getName());
             shortItemDto.setPhotoUrl(itemCart.getItem().getPhotoURL());
             shortItemDto.setItemCount(itemCart.getCountOfThisItemInCart());
+            shortItemDto.setShopId(itemCart.getItem().getShop().getId());
 
             result.add(shortItemDto);
         }

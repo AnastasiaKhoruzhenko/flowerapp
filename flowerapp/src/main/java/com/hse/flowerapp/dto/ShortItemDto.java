@@ -8,6 +8,7 @@ import lombok.Data;
 public class ShortItemDto {
 
     private Long itemId;
+    private Long shopId;
     private String name;
     private Integer price;
     private String shortDescription;
@@ -26,6 +27,7 @@ public class ShortItemDto {
         shortItemDto.setPhotoUrl(itemDto.getPhotoUrl());
         shortItemDto.setDiscountPrice(itemDto.getDiscountPrice());
         shortItemDto.setDiscount(itemDto.getDiscount());
+        shortItemDto.setShopId(itemDto.getShopId());
 
         return shortItemDto;
     }
@@ -92,5 +94,13 @@ public class ShortItemDto {
 
     public void setItemCount(Integer itemCount) {
         this.itemCount = itemCount;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 }

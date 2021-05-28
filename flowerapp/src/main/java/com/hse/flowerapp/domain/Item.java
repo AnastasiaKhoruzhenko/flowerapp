@@ -87,6 +87,13 @@ public class Item extends BaseEntity{
     @OneToMany(mappedBy = "item")
     List<OrderItem> countItemInOrders = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinTable(name = "item_favourite",
+            joinColumns = {@JoinColumn(name = "item_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "favourite_id", referencedColumnName = "id")})
+    private List<Favourite> favouriteList = new ArrayList<>();
+
     public Item(){
         Date date = new Date();
         setCreated(date);
@@ -250,5 +257,13 @@ public class Item extends BaseEntity{
 
     public void setOrderedTimes(Integer orderedTimes) {
         this.orderedTimes = orderedTimes;
+    }
+
+    public List<Favourite> getFavouriteList() {
+        return favouriteList;
+    }
+
+    public void setFavouriteList(List<Favourite> favouriteList) {
+        this.favouriteList = favouriteList;
     }
 }

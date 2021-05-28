@@ -48,6 +48,9 @@ public class User extends BaseEntity {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "favourite_id")
+    private Long favouriteId;
+
     @OneToMany
     @JoinTable(name = "user_order",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
@@ -221,5 +224,13 @@ public class User extends BaseEntity {
 
     public void setWorkShop(Shop workShop) {
         this.workShop = workShop;
+    }
+
+    public Long getFavouriteId() {
+        return favouriteId;
+    }
+
+    public void setFavouriteId(Long favouriteId) {
+        this.favouriteId = favouriteId;
     }
 }
