@@ -26,14 +26,16 @@ public class UserRestController {
     private final AddressService addressService;
     private final FavouriteService favouriteService;
     private final ItemService itemService;
+    private final FeedbackService feedbackService;
 
     @Autowired
-    public UserRestController(UserService userService, ShopService shopService, AddressService addressService, FavouriteService favouriteService, ItemService itemService) {
+    public UserRestController(UserService userService, ShopService shopService, AddressService addressService, FavouriteService favouriteService, ItemService itemService, FeedbackService feedbackService) {
         this.userService = userService;
         this.shopService = shopService;
         this.addressService = addressService;
         this.favouriteService = favouriteService;
         this.itemService = itemService;
+        this.feedbackService = feedbackService;
     }
 
     @GetMapping(value = "getbytoken")
@@ -258,5 +260,18 @@ public class UserRestController {
         User user = userService.findByEmail(username);
 
         return ResponseEntity.ok(userService.getFavouriteList(user.getId()));
+    }
+
+    @PostMapping(value = "feedback")
+    public ResponseEntity sendFeedback(@Validated FeedbackDto feedbackDto) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
+        token = token.substring(7);
+        String username = jwtTokenProvider.getUsername(token);
+        User user = userService.findByEmail(username);
+
+        feedbackDto.setFromEmail(user.getEmail());
+        FeedbackDto feedbackDto1  = feedbackService.sendFeedback(feedbackDto);
+        return ResponseEntity.ok(feedbackDto1);
     }
 }

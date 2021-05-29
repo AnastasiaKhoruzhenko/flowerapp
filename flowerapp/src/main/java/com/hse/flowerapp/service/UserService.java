@@ -2,6 +2,7 @@ package com.hse.flowerapp.service;
 
 import com.hse.flowerapp.domain.*;
 import com.hse.flowerapp.dto.AddressDto;
+import com.hse.flowerapp.dto.FeedbackDto;
 import com.hse.flowerapp.dto.ItemDto;
 
 import java.util.List;

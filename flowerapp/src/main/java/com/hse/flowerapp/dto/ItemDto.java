@@ -28,6 +28,7 @@ public class ItemDto {
     private String flowers;
     private Float rating;
     private Integer reviewCount;
+    private Integer orderedTimes;
 
     public Long getShopId() { return shopId; }
 
@@ -119,6 +120,14 @@ public class ItemDto {
         this.reviewCount = reviewCount;
     }
 
+    public Integer getOrderedTimes() {
+        return orderedTimes;
+    }
+
+    public void setOrderedTimes(Integer orderedTimes) {
+        this.orderedTimes = orderedTimes;
+    }
+
     public static ItemDto convertToDTO(Item item){
         ItemDto itemDto = new ItemDto();
 
@@ -139,6 +148,7 @@ public class ItemDto {
         itemDto.setShopId(item.getShop().getId());
         itemDto.setRating(item.getRating());
         itemDto.setReviewCount(item.getReviewCount());
+        itemDto.setOrderedTimes(item.getOrderedTimes());
 
         return itemDto;
     }
