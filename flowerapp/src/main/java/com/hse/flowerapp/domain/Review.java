@@ -35,6 +35,9 @@ public class Review extends BaseEntity {
     @Column(name = "order_id")
     private Long orderId;
 
+    @Column(name = "user_name")
+    private String userName;
+
     public String getHeader() {
         return header;
     }
@@ -89,5 +92,13 @@ public class Review extends BaseEntity {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

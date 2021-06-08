@@ -110,6 +110,8 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setCategoryName(item.getCategoryName());
         itemDto.setFlowers(item.getFlowers());
         itemDto.setShopId(item.getShop().getId());
+        itemDto.setRating(item.getRating());
+        itemDto.setReviewCount(item.getReviewCount());
         itemDto.setOrderedTimes(item.getOrderedTimes());
 
         return itemDto;

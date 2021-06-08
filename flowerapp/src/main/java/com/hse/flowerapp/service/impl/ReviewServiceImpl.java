@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -59,5 +61,17 @@ public class ReviewServiceImpl implements ReviewService {
         itemRepository.save(item);
 
         return reviewDto;
+    }
+
+    @Override
+    public List<ReviewDto> itemReviews(Long item_id) {
+        List<Review> reviews = reviewRepository.findAll();
+        List<ReviewDto> myReviews = new ArrayList<>();
+        reviews.forEach(review -> {
+            if(review.getItemId().equals(item_id))
+                myReviews.add(ReviewDto.convertReviewToReviewDTO(review));
+        });
+
+        return myReviews;
     }
 }

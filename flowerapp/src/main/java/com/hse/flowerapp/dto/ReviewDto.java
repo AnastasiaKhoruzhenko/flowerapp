@@ -10,6 +10,7 @@ public class ReviewDto {
     private String header;
     private String body;
     private Integer grade;
+    private String userName;
 
     public Long getReviewId() {
         return reviewId;
@@ -67,6 +68,14 @@ public class ReviewDto {
         this.orderId = orderId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public static ReviewDto convertReviewToReviewDTO(Review review){
         ReviewDto reviewDto = new ReviewDto();
 
@@ -76,6 +85,7 @@ public class ReviewDto {
         reviewDto.setBody(review.getBody());
         reviewDto.setHeader(review.getHeader());
         reviewDto.setOrderId(review.getOrderId());
+        reviewDto.setUserName(review.getUserName());
         return reviewDto;
     }
 
@@ -88,6 +98,7 @@ public class ReviewDto {
         review.setBody(reviewDto.getBody());
         review.setHeader(reviewDto.getHeader());
         review.setOrderId(reviewDto.getOrderId());
+        review.setUserName(reviewDto.getUserName());
         return review;
     }
 }

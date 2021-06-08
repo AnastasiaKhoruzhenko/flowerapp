@@ -40,12 +40,12 @@ public class ItemRestController {
 
     @GetMapping(value = "{id}")
     @ResponseBody
-    public ResponseEntity getItemById(@PathVariable("id") Long id){
+    public ResponseEntity getItemById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
     @PostMapping(value = "rate")
-    public ResponseEntity rateItem(@Validated ReviewDto reviewDto){
+    public ResponseEntity rateItem(@Validated ReviewDto reviewDto) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         String token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest().getHeader("Authorization");
@@ -55,8 +55,14 @@ public class ItemRestController {
 
         reviewDto.setUserId(user.getId());
         reviewDto.setHeader(user.getEmail());
+        reviewDto.setUserName(user.getName());
 
         return ResponseEntity.ok(reviewService.createItemReview(reviewDto));
+    }
+
+    @GetMapping(value = "{id}/review")
+    public ResponseEntity itemRating(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(reviewService.itemReviews(id));
     }
 }
 
